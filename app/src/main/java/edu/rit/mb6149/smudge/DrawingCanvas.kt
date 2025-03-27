@@ -64,7 +64,9 @@ fun DrawingCanvas() {
             strokePaths.forEach { path ->
                 drawPath(
                     path,
+                    //TODO: color state
                     color = Color.Red,
+                    //TODO: different brushes
                     style = Stroke(width = 40f, cap = StrokeCap.Round))
             }
 
