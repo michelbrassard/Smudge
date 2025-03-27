@@ -13,11 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -25,7 +20,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +34,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import edu.rit.mb6149.smudge.ui.theme.SmudgeTheme
 
@@ -126,8 +121,23 @@ fun TopAppBar() {
             }
         },
         actions = {
-            IconButton(onClick = {}) {
-                Icon(Icons.Filled.MoreVert, contentDescription = "Description")
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.download),
+                    contentDescription = "Download"
+                )
+            }
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.layers_2),
+                    contentDescription = "Layers"
+                )
+            }
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.palette),
+                    contentDescription = "Palette"
+                )
             }
         }
     )
@@ -138,13 +148,29 @@ fun BottomAppBar() {
     BottomAppBar(
         actions = {
             IconButton(onClick = { }) {
-                Icon(Icons.Filled.Check, contentDescription = "Description")
+                Icon(
+                    painter = painterResource(id = R.drawable.undo_2),
+                    contentDescription = "Undo"
+                )
             }
             IconButton(onClick = { }) {
-                Icon(Icons.Filled.Edit, contentDescription = "Description")
+                Icon(
+                    painter = painterResource(id = R.drawable.redo_2),
+                    contentDescription = "Redo"
+                )
             }
             IconButton(onClick = { }) {
-                Icon(Icons.Filled.Menu, contentDescription = "Description")
+                Icon(
+                    painter = painterResource(id = R.drawable.eraser),
+                    contentDescription = "Eraser"
+                )
+            }
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.brush),
+                    contentDescription = "Brush",
+                    tint = Color.Black
+                )
             }
         },
         floatingActionButton = {
@@ -152,7 +178,10 @@ fun BottomAppBar() {
                 onClick = {},
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             ) {
-                Icon(Icons.Filled.Add, "Local description")
+                Icon(
+                    painter = painterResource(id = R.drawable.brush),
+                    contentDescription = "Brush"
+                )
             }
         }
     )
