@@ -6,11 +6,14 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun BottomAppBar() {
+fun BottomAppBar(isBrushesOpen: (Boolean) -> Unit) {
+
     BottomAppBar(
         actions = {
             IconButton(onClick = { }) {
@@ -31,7 +34,9 @@ fun BottomAppBar() {
                     contentDescription = "Eraser"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                isBrushesOpen(true)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.brush),
                     contentDescription = "Brush",
