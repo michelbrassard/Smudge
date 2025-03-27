@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
                     Column(modifier = Modifier.padding(innerPadding)) {
                         DrawingCanvas()
                     }
-
                 }
             }
         }
