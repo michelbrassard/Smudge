@@ -43,6 +43,12 @@ fun BottomAppBar(isBrushesOpen: (Boolean) -> Unit) {
                     tint = Color.Black
                 )
             }
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.paint_roller),
+                    contentDescription = "Eraser"
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
