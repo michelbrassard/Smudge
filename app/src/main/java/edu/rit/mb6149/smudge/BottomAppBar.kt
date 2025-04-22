@@ -6,11 +6,19 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
+import edu.rit.mb6149.smudge.model.Tool
 
 @Composable
-fun BottomAppBar() {
+fun BottomAppBar(
+    isToolbarOpen: (Boolean) -> Unit,
+    brushStyle: (android.graphics.Paint.Style) -> Unit,
+    updateSelectedTool: (Tool) -> Unit,
+    selectedTool: Tool
+) {
+    val updatedSelectedTool by rememberUpdatedState(selectedTool)
     BottomAppBar(
         actions = {
             IconButton(onClick = { }) {
@@ -25,29 +33,62 @@ fun BottomAppBar() {
                     contentDescription = "Redo"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                updateSelectedTool(Tool.ERASER)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.eraser),
                     contentDescription = "Eraser"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                updateSelectedTool(Tool.BRUSH)
+                brushStyle(android.graphics.Paint.Style.STROKE)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.brush),
                     contentDescription = "Brush",
-                    tint = Color.Black
+                )
+            }
+            IconButton(
+                onClick = {
+                    updateSelectedTool(Tool.PAINT_ROLLER)
+                    brushStyle(android.graphics.Paint.Style.FILL)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.paint_roller),
+                    contentDescription = "Eraser"
                 )
             }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = {
+                    isToolbarOpen(true)
+                },
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.brush),
-                    contentDescription = "Brush"
-                )
+                when (updatedSelectedTool) {
+                    Tool.BRUSH -> {
+                        Icon(
+                            painter = painterResource(id = R.drawable.brush),
+                            contentDescription = "Brush"
+                        )
+                    }
+                    Tool.ERASER -> {
+                        Icon(
+                            painter = painterResource(id = R.drawable.eraser),
+                            contentDescription = "Eraser"
+                        )
+                    }
+                    Tool.PAINT_ROLLER -> {
+                        Icon(
+                            painter = painterResource(id = R.drawable.paint_roller),
+                            contentDescription = "Paint Roller"
+                        )
+                    }
+                }
             }
         }
     )

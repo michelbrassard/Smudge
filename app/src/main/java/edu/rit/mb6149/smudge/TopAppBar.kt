@@ -11,7 +11,11 @@ import androidx.compose.ui.res.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar() {
+fun TopAppBar(
+    isColorsOpen: (Boolean) -> Unit,
+    isLayersOpen: (Boolean) -> Unit,
+    isDownloadOpen: (Boolean) -> Unit
+) {
     TopAppBar(
         title = {
             IconButton(onClick = {}) {
@@ -19,19 +23,25 @@ fun TopAppBar() {
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                isDownloadOpen(true)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.download),
                     contentDescription = "Download"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                isLayersOpen(true)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.layers_2),
                     contentDescription = "Layers"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                isColorsOpen(true)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.palette),
                     contentDescription = "Palette"
