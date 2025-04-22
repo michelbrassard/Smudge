@@ -1,18 +1,18 @@
 package edu.rit.mb6149.smudge
 
 import android.annotation.SuppressLint
-import android.graphics.BlurMaskFilter
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -20,30 +20,36 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import edu.rit.mb6149.smudge.model.BrushType
+import edu.rit.mb6149.smudge.model.Tool
+import edu.rit.mb6149.smudge.toolbars.BrushToolbar
+import edu.rit.mb6149.smudge.toolbars.EraserToolbar
+import edu.rit.mb6149.smudge.toolbars.PaintRollerToolbar
 import edu.rit.mb6149.smudge.ui.theme.SmudgeTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SmudgeTheme {
-                //top app bar
+                var selectedTool by remember { mutableStateOf(Tool.BRUSH) }
+
                 var isColorsOpen by remember { mutableStateOf(false) }
                 var isLayersOpen by remember { mutableStateOf(false) }
                 var isDownloadOpen by remember { mutableStateOf(false) }
-                //layers -> list of path lists
+                var isToolbarOpen by remember { mutableStateOf(false) }
 
-                //bottom app bar
-                var isBrushesOpen by remember { mutableStateOf(false) }
+                //layers -> list of path lists
 
                 var color by remember { mutableIntStateOf(Color.BLACK) }
                 var strokeWidth by remember { mutableFloatStateOf(10f) }
                 var style by remember { mutableStateOf(Paint.Style.STROKE) }
-                var strokeCap by remember { mutableStateOf(Paint.Cap.ROUND) }
-                var maskFilter by remember { mutableStateOf(BlurMaskFilter(2f, BlurMaskFilter.Blur.NORMAL)) }
+                var brushType by remember { mutableStateOf(BrushType.PENCIL) }
+
+                //TODO var currentLayer by remember { mutableIntStateOf(0) }
 
                 Scaffold(modifier = Modifier.fillMaxSize(),
                         topBar = { TopAppBar(
@@ -58,67 +64,88 @@ class MainActivity : ComponentActivity() {
                             }
                         ) },
                         bottomBar = { BottomAppBar(
-                            isBrushesOpen = { updateIsBrushesOpen ->
-                                isBrushesOpen = updateIsBrushesOpen
-                            }
+                            isToolbarOpen = { updateIsSizeOpen ->
+                                isToolbarOpen = updateIsSizeOpen
+                            },
+                            brushStyle = { updateBrushStyle ->
+                                style = updateBrushStyle
+                            },
+                            updateSelectedTool = { updateSelectedTool ->
+                                selectedTool = updateSelectedTool
+                            },
+                            selectedTool = selectedTool
                         ) },
                     ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        DrawingCanvas(color, strokeWidth, style, strokeCap, maskFilter)
+                        DrawingCanvas(color, strokeWidth, style, brushType)
                     }
                 }
 
                 when {
-                    //Top App Bar functions
                     isColorsOpen -> {
-                        MinimalDialog(
-                            onDismissRequest = { isColorsOpen = false },
-                            customHeight = 580.dp,
-                        ) {
-                            ColorPicker(
-                                pickedColor = { updateColor ->
-                                    color = updateColor
-                                },
-                                initialColor = color
-                            )
-                        }
+                        ColorPicker(
+                            pickedColor = { updateColor ->
+                                color = updateColor
+                            },
+                            initialColor = color,
+                            updateIsColorsOpen = { updateIsColorsOpen ->
+                                isColorsOpen = updateIsColorsOpen
+                            },
+                        )
                     }
                     isLayersOpen -> {
-                        MinimalDialog(
-                            onDismissRequest = { isLayersOpen = false },
-                            customHeight = 200.dp
-                        ) {
-                            Text("Layers...")
-                        }
+                        Layers(
+                            updateIsLayersOpen = { updatedLayersState ->
+                                isLayersOpen = updatedLayersState
+                            }
+                        )
                     }
                     isDownloadOpen -> {
-                        MinimalDialog(
-                            onDismissRequest = { isDownloadOpen = false },
-                            customHeight = 200.dp
-                        ) {
-                            Text("Download...")
-                        }
-                    }
-
-                    //Bottom App Bar functions
-                    isBrushesOpen -> {
-                        MinimalDialog(
-                            onDismissRequest = { isBrushesOpen = false },
-                            customHeight = 200.dp
-                        ) {
-                            Column {
-                                Text("Brushes...")
+                        DownloadOptions(
+                            updateIsDownloadOpen = { updatedDownloadState ->
+                                isDownloadOpen = updatedDownloadState
                             }
-
+                        )
+                    }
+                    isToolbarOpen -> {
+                        when (selectedTool) {
+                            Tool.BRUSH -> {
+                                BrushToolbar(
+                                    updateIsToolbarOpen = { updatedToolbarState ->
+                                        isToolbarOpen = updatedToolbarState
+                                    },
+                                    updateStrokeWidth = { updatedStrokeWidth ->
+                                        strokeWidth = updatedStrokeWidth
+                                    },
+                                    updateBrushType = { updatedBrushType ->
+                                        brushType = updatedBrushType
+                                    },
+                                    currentStrokeWidth = strokeWidth,
+                                    currentBrush = brushType,
+                                )
+                            }
+                            Tool.ERASER -> {
+                                EraserToolbar(
+                                    updateIsToolbarOpen = { updatedToolbarState ->
+                                        isToolbarOpen = updatedToolbarState
+                                    }
+                                )
+                            }
+                            Tool.PAINT_ROLLER -> {
+                                PaintRollerToolbar(
+                                    updateIsToolbarOpen = { updatedToolbarState ->
+                                        isToolbarOpen = updatedToolbarState
+                                    },
+                                    updateBrushType = { updatedBrushType ->
+                                        brushType = updatedBrushType
+                                    },
+                                    currentStrokeWidth = strokeWidth,
+                                    currentBrush = brushType,
+                                )
+                            }
                         }
                     }
                 }
-                //TOP BAR...
-                //is layers
-                //is download
-
-                //BOTTOM BAR
-                //is primary button
             }
         }
     }
