@@ -1,5 +1,6 @@
 package edu.rit.mb6149.smudge
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,26 +13,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun MinimalDialog(onDismissRequest: () -> Unit) {
+fun MinimalDialog(
+    onDismissRequest: () -> Unit,
+    customHeight: Dp,
+    content: @Composable () -> Unit
+) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .padding(16.dp),
+                .height(customHeight),
             shape = RoundedCornerShape(16.dp),
         ) {
-            Text(
-                text = "This is a minimal dialog",
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
-                textAlign = TextAlign.Center,
-            )
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                content()
+            }
         }
     }
 }
