@@ -1,6 +1,5 @@
 package edu.rit.mb6149.smudge.model
 
-import android.graphics.BlurMaskFilter
 import android.graphics.Paint
 import androidx.compose.ui.graphics.Path
 
