@@ -1,6 +1,5 @@
 package edu.rit.mb6149.smudge
 
-import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -21,16 +20,21 @@ import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
+import edu.rit.mb6149.smudge.model.BrushType
+import edu.rit.mb6149.smudge.model.DrawPath
 
 @Composable
 fun DrawingCanvas(
     currentColor: Int,
     currentStrokeWidth: Float,
     currentStyle: android.graphics.Paint.Style,
-    currentStrokeCap: android.graphics.Paint.Cap,
-    currentMaskFilter: BlurMaskFilter
+    currentBrushType: BrushType
 ) {
     val updatedColor by rememberUpdatedState(currentColor)
+    val updatedStrokeWidth by rememberUpdatedState(currentStrokeWidth)
+    val updatedStyle by rememberUpdatedState(currentStyle)
+    val updatedBrushType by rememberUpdatedState(currentBrushType)
+
     val drawPathPaths = remember {
         mutableStateListOf<DrawPath>()
     }
@@ -51,10 +55,9 @@ fun DrawingCanvas(
                         currentDrawPath = DrawPath(
                             Path().apply { moveTo(offset.x, offset.y) },
                             updatedColor,
-                            currentStrokeWidth,
-                            currentStyle,
-                            currentStrokeCap,
-                            currentMaskFilter
+                            updatedStrokeWidth,
+                            updatedStyle,
+                            updatedBrushType
                         )
 
                         drawPathPaths.add(currentDrawPath!!)
@@ -80,17 +83,17 @@ fun DrawingCanvas(
             }
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPathPaths.forEach { drawPoint ->
+            drawPathPaths.forEach { drawPath ->
                 drawIntoCanvas { canvas ->
                     val paint = android.graphics.Paint().apply {
-                        color = drawPoint.color
-                        strokeWidth = drawPoint.strokeWidth
-                        style = drawPoint.style
-                        strokeCap = drawPoint.strokeCap
-                        maskFilter = drawPoint.maskFilter
+                        color = drawPath.color
+                        strokeWidth = drawPath.strokeWidth
+                        style = drawPath.style
+                        strokeCap = drawPath.brushType.strokeCap
+                        maskFilter = drawPath.brushType.maskFilter
                         isAntiAlias = true
                     }
-                    canvas.nativeCanvas.drawPath(drawPoint.path.asAndroidPath(), paint)
+                    canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
                 }
             }
         }
