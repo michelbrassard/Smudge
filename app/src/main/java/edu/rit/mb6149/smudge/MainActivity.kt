@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
 import edu.rit.mb6149.smudge.model.Tool
 import edu.rit.mb6149.smudge.toolbars.BrushToolbar
@@ -42,14 +43,13 @@ class MainActivity : ComponentActivity() {
                 var isDownloadOpen by remember { mutableStateOf(false) }
                 var isToolbarOpen by remember { mutableStateOf(false) }
 
-                //layers -> list of path lists
+                var artwork by remember { mutableStateOf(Artwork("Test")) }
+                var currentLayerPosition by remember { mutableIntStateOf(0) }
 
                 var color by remember { mutableIntStateOf(Color.BLACK) }
                 var strokeWidth by remember { mutableFloatStateOf(10f) }
                 var style by remember { mutableStateOf(Paint.Style.STROKE) }
-                var brushType by remember { mutableStateOf(BrushType.PENCIL) }
-
-                //TODO var currentLayer by remember { mutableIntStateOf(0) }
+                var brushType by remember { mutableStateOf(BrushType.PEN) }
 
                 Scaffold(modifier = Modifier.fillMaxSize(),
                         topBar = { TopAppBar(
@@ -77,7 +77,9 @@ class MainActivity : ComponentActivity() {
                         ) },
                     ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        DrawingCanvas(color, strokeWidth, style, brushType)
+                        DrawingCanvas(
+                            color, strokeWidth, style, brushType, artwork, currentLayerPosition
+                        )
                     }
                 }
 
@@ -97,7 +99,12 @@ class MainActivity : ComponentActivity() {
                         Layers(
                             updateIsLayersOpen = { updatedLayersState ->
                                 isLayersOpen = updatedLayersState
-                            }
+                            },
+                            updateLayerPosition = { updatedLayerPosition ->
+                                currentLayerPosition = updatedLayerPosition
+                            },
+                            currentLayerPosition = currentLayerPosition,
+                            currentArtwork = artwork
                         )
                     }
                     isDownloadOpen -> {

@@ -8,8 +8,8 @@ enum class BrushType(
     val strokeCap: Paint.Cap,
     val maskFilter: BlurMaskFilter
 ) {
-    PENCIL("Pencil", Paint.Cap.ROUND, BlurMaskFilter(2f, BlurMaskFilter.Blur.NORMAL)),
-    PEN("Pen", Paint.Cap.SQUARE, BlurMaskFilter(0.1f, BlurMaskFilter.Blur.SOLID)),
+    PEN("Pen", Paint.Cap.ROUND, BlurMaskFilter(2f, BlurMaskFilter.Blur.NORMAL)),
+    MARKER("Marker", Paint.Cap.SQUARE, BlurMaskFilter(0.1f, BlurMaskFilter.Blur.SOLID)),
     AIRBRUSH("Airbrush", Paint.Cap.ROUND, BlurMaskFilter(50f, BlurMaskFilter.Blur.NORMAL)),
     GLOW("Glow", Paint.Cap.ROUND, BlurMaskFilter(50f, BlurMaskFilter.Blur.OUTER))
 }
