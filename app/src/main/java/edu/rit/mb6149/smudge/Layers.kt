@@ -95,21 +95,27 @@ fun Layers(
                                         updateLayerPosition(index)
                                     }
                                     .fillMaxWidth()
-                                    .padding(16.dp),
+                                    .padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                //todo add layer names
-                                //todo add canvas representing the layer
-                                Text("Layer")
+                                Thumbnail(item)
+                                Text(item.name)
                                 IconButton(onClick = {
                                     if (layers.size > 1) {
                                         layers = layers.apply {
                                             removeAt(index)
                                         }
-                                        if (updatedLayerPosition > 0) {
+                                        //todo fix this
+                                        if (updatedLayerPosition > 0 && updatedLayerPosition > index) {
                                             updateLayerPosition(index - 1)
                                         }
+                                        if (updatedLayerPosition > index) {
+                                            updateLayerPosition(index)
+                                        }
+                                    }
+                                    else {
+                                        item.drawPaths.clear()
                                     }
                                 }) {
                                     Icon(
@@ -126,7 +132,7 @@ fun Layers(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Button(onClick = {
-                    layers.add(Layer("New Layer"))
+                    layers.add(Layer("Layer " + layers.size))
                 }) {
                     Text("Add")
                 }

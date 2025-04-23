@@ -5,7 +5,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 
 class Artwork(
     var name: String,
-    val layers: SnapshotStateList<Layer> = mutableStateListOf(Layer("Layer 1"))
+    val layers: SnapshotStateList<Layer> = mutableStateListOf(Layer("Base Layer"))
 )
 
 class Layer(
