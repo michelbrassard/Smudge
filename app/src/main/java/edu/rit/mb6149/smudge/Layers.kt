@@ -133,6 +133,7 @@ fun Layers(
             ) {
                 Button(onClick = {
                     layers.add(Layer("Layer " + layers.size))
+                    updateLayerPosition(layers.lastIndex)
                 }) {
                     Text("Add")
                 }

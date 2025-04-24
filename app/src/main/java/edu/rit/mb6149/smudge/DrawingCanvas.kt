@@ -1,5 +1,7 @@
 package edu.rit.mb6149.smudge
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -23,6 +25,7 @@ import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
 import edu.rit.mb6149.smudge.model.DrawPath
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun DrawingCanvas(
     currentColor: Int,
@@ -30,7 +33,8 @@ fun DrawingCanvas(
     currentStyle: android.graphics.Paint.Style,
     currentBrushType: BrushType,
     currentArtwork: Artwork,
-    currentLayerPosition: Int
+    currentLayerPosition: Int,
+    currentBlendMode: android.graphics.BlendMode
 ) {
     val updatedColor by rememberUpdatedState(currentColor)
     val updatedStrokeWidth by rememberUpdatedState(currentStrokeWidth)
@@ -38,6 +42,7 @@ fun DrawingCanvas(
     val updatedBrushType by rememberUpdatedState(currentBrushType)
     val updatedArtwork by rememberUpdatedState(currentArtwork)
     val updatedLayerPosition by rememberUpdatedState(currentLayerPosition)
+    val updatedBlendMode by rememberUpdatedState(currentBlendMode)
 
     val drawPathPaths by rememberUpdatedState(updatedArtwork.layers[updatedLayerPosition].drawPaths)
     var currentDrawPath by remember {
@@ -46,6 +51,9 @@ fun DrawingCanvas(
     var lastPoint by remember {
         mutableStateOf<Offset?>(null)
     }
+
+    //val bitmap by remember { mutableStateOf(createBitmap(100, 100)) }
+    //val customCanvas by remember { mutableStateOf(Canvas(bitmap)) }
 
     Box(
         modifier = Modifier
@@ -59,7 +67,8 @@ fun DrawingCanvas(
                             updatedColor,
                             updatedStrokeWidth,
                             updatedStyle,
-                            updatedBrushType
+                            updatedBrushType,
+                            updatedBlendMode
                         )
 
                         drawPathPaths.add(currentDrawPath!!)
@@ -85,9 +94,11 @@ fun DrawingCanvas(
             }
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            updatedArtwork.layers.forEach { layer ->
-                layer.drawPaths.forEach { drawPath ->
-                    drawIntoCanvas { canvas ->
+            val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
+            drawIntoCanvas { canvas ->
+                val layerId = canvas.nativeCanvas.saveLayer(bounds, null) //temporary canvas for blending
+                updatedArtwork.layers.forEach { layer ->
+                    layer.drawPaths.forEach { drawPath ->
                         val paint = android.graphics.Paint().apply {
                             color = drawPath.color
                             strokeWidth = drawPath.strokeWidth
@@ -95,10 +106,13 @@ fun DrawingCanvas(
                             strokeCap = drawPath.brushType.strokeCap
                             maskFilter = drawPath.brushType.maskFilter
                             isAntiAlias = true
+                            blendMode = drawPath.blendMode
+                            strokeJoin = android.graphics.Paint.Join.ROUND
                         }
                         canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
                     }
                 }
+                canvas.nativeCanvas.restoreToCount(layerId)
             }
         }
     }

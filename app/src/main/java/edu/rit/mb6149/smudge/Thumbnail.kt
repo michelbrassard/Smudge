@@ -37,8 +37,10 @@ fun Thumbnail(layer: Layer) {
             translate(-rectContainingAllPaths.width / 2 * scale)
             scale(scale, scale)
         }) {
-            layer.drawPaths.forEach { drawPath ->
-                drawIntoCanvas { canvas ->
+            val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
+            drawIntoCanvas { canvas ->
+                val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
+                layer.drawPaths.forEach { drawPath ->
                     val paint = android.graphics.Paint().apply {
                         color = drawPath.color
                         strokeWidth = drawPath.strokeWidth
@@ -49,6 +51,7 @@ fun Thumbnail(layer: Layer) {
                     }
                     canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
                 }
+                canvas.nativeCanvas.restoreToCount(layerId)
             }
         }
     }
