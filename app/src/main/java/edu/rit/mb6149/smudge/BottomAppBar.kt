@@ -1,5 +1,8 @@
 package edu.rit.mb6149.smudge
 
+import android.graphics.BlendMode
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -11,10 +14,12 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
 import edu.rit.mb6149.smudge.model.Tool
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun BottomAppBar(
     isToolbarOpen: (Boolean) -> Unit,
-    brushStyle: (android.graphics.Paint.Style) -> Unit,
+    updateBrushStyle: (android.graphics.Paint.Style) -> Unit,
+    updateBlendMode: (BlendMode) -> Unit,
     updateSelectedTool: (Tool) -> Unit,
     selectedTool: Tool
 ) {
@@ -35,6 +40,8 @@ fun BottomAppBar(
             }
             IconButton(onClick = {
                 updateSelectedTool(Tool.ERASER)
+                updateBlendMode(BlendMode.CLEAR)
+                updateBrushStyle(android.graphics.Paint.Style.STROKE)
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.eraser),
@@ -43,7 +50,8 @@ fun BottomAppBar(
             }
             IconButton(onClick = {
                 updateSelectedTool(Tool.BRUSH)
-                brushStyle(android.graphics.Paint.Style.STROKE)
+                updateBlendMode(BlendMode.SRC_OVER)
+                updateBrushStyle(android.graphics.Paint.Style.STROKE)
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.brush),
@@ -53,7 +61,8 @@ fun BottomAppBar(
             IconButton(
                 onClick = {
                     updateSelectedTool(Tool.PAINT_ROLLER)
-                    brushStyle(android.graphics.Paint.Style.FILL)
+                    updateBrushStyle(android.graphics.Paint.Style.FILL)
+                    updateBlendMode(BlendMode.SRC_OVER)
                 }
             ) {
                 Icon(

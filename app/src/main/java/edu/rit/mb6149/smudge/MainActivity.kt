@@ -1,6 +1,7 @@
 package edu.rit.mb6149.smudge
 
 import android.annotation.SuppressLint
+import android.graphics.BlendMode
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Build
@@ -47,9 +48,10 @@ class MainActivity : ComponentActivity() {
                 var currentLayerPosition by remember { mutableIntStateOf(0) }
 
                 var color by remember { mutableIntStateOf(Color.BLACK) }
-                var strokeWidth by remember { mutableFloatStateOf(10f) }
+                var strokeWidth by remember { mutableFloatStateOf(100f) }
                 var style by remember { mutableStateOf(Paint.Style.STROKE) }
                 var brushType by remember { mutableStateOf(BrushType.PEN) }
+                var blendMode by remember { mutableStateOf(BlendMode.SRC_OVER) }
 
                 Scaffold(modifier = Modifier.fillMaxSize(),
                         topBar = { TopAppBar(
@@ -67,18 +69,27 @@ class MainActivity : ComponentActivity() {
                             isToolbarOpen = { updateIsSizeOpen ->
                                 isToolbarOpen = updateIsSizeOpen
                             },
-                            brushStyle = { updateBrushStyle ->
+                            updateBrushStyle = { updateBrushStyle ->
                                 style = updateBrushStyle
                             },
                             updateSelectedTool = { updateSelectedTool ->
                                 selectedTool = updateSelectedTool
                             },
-                            selectedTool = selectedTool
+                            selectedTool = selectedTool,
+                            updateBlendMode = { updateBlendMode ->
+                                blendMode = updateBlendMode
+                            }
                         ) },
                     ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         DrawingCanvas(
-                            color, strokeWidth, style, brushType, artwork, currentLayerPosition
+                            color,
+                            strokeWidth,
+                            style,
+                            brushType,
+                            artwork,
+                            currentLayerPosition,
+                            blendMode
                         )
                     }
                 }
@@ -135,7 +146,15 @@ class MainActivity : ComponentActivity() {
                                 EraserToolbar(
                                     updateIsToolbarOpen = { updatedToolbarState ->
                                         isToolbarOpen = updatedToolbarState
-                                    }
+                                    },
+                                    updateStrokeWidth = { updatedStrokeWidth ->
+                                        strokeWidth = updatedStrokeWidth
+                                    },
+                                    updateBrushType = { updatedBrushType ->
+                                        brushType = updatedBrushType
+                                    },
+                                    currentStrokeWidth = strokeWidth,
+                                    currentBrush = brushType,
                                 )
                             }
                             Tool.PAINT_ROLLER -> {
