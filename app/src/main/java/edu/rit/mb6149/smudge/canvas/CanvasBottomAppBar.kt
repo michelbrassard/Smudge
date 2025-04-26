@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
 import edu.rit.mb6149.smudge.R
-import edu.rit.mb6149.smudge.model.Tool
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
