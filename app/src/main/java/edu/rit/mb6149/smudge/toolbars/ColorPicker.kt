@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.toolbars
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +21,7 @@ import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 
 @Composable
 fun ColorPicker(
@@ -34,12 +35,12 @@ fun ColorPicker(
         customHeight = 550.dp,
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
             HsvColorPicker(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxWidth()
                     .height(300.dp)
                     .padding(16.dp),
@@ -50,7 +51,7 @@ fun ColorPicker(
                 initialColor = Color(initialColor)
             )
             AlphaSlider(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxWidth()
                     .padding(16.dp)
                     .height(32.dp),
@@ -58,7 +59,7 @@ fun ColorPicker(
                 initialColor = Color(initialColor)
             )
             BrightnessSlider(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxWidth()
                     .padding(16.dp)
                     .height(32.dp),
@@ -66,13 +67,13 @@ fun ColorPicker(
                 initialColor = Color(initialColor)
             )
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.Companion.fillMaxWidth()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Companion.CenterHorizontally
             ) {
                 Row {
                     AlphaTile(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .size(60.dp)
                             .clip(RoundedCornerShape(16.dp)),
                         controller = controller

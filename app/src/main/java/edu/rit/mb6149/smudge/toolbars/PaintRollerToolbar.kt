@@ -2,6 +2,8 @@ package edu.rit.mb6149.smudge.toolbars
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
-import edu.rit.mb6149.smudge.MinimalDialog
+import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 import edu.rit.mb6149.smudge.model.BrushType
 
 @Composable
@@ -67,8 +69,8 @@ fun PaintRollerToolbar(
                     }
                     val centerX = size.width / 2
                     val centerY = size.height / 2
-                    val arcPath = android.graphics.Path().apply {
-                        addArc(android.graphics.RectF(centerX - 250f, 450f, centerX + 250f, centerY + 400f), 0f, -180f)
+                    val arcPath = Path().apply {
+                        addArc(RectF(centerX - 250f, 450f, centerX + 250f, centerY + 400f), 0f, -180f)
                     }
                     canvas.nativeCanvas.drawPath(arcPath, paint)
                 }

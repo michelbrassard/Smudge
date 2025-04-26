@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.toolbars
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

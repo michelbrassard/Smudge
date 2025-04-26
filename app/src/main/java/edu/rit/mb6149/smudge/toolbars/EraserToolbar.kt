@@ -1,7 +1,9 @@
 package edu.rit.mb6149.smudge.toolbars
 
+import android.graphics.BlendMode
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -29,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
-import edu.rit.mb6149.smudge.MinimalDialog
+import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 import edu.rit.mb6149.smudge.model.BrushType
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -61,15 +63,15 @@ fun EraserToolbar(
                     .fillMaxWidth()
                     .height(300.dp)
             ) {
-                val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
+                val bounds = RectF(0f, 0f, size.width, size.height)
                 drawIntoCanvas { canvas ->
                     val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
                     val rectangleBackground = Paint().apply {
                         color = Color.BLACK
                         style = Paint.Style.FILL
-                        blendMode = android.graphics.BlendMode.SRC_OVER
+                        blendMode = BlendMode.SRC_OVER
                     }
-                    val referenceRectangle = android.graphics.RectF(0f, 0f, size.width, size.height)
+                    val referenceRectangle = RectF(0f, 0f, size.width, size.height)
                     canvas.nativeCanvas.drawRect(referenceRectangle, rectangleBackground)
 
                     val paint = Paint().apply {
@@ -78,7 +80,7 @@ fun EraserToolbar(
                         style = Paint.Style.STROKE
                         strokeCap = updatedBrushType.strokeCap
                         maskFilter = updatedBrushType.maskFilter
-                        blendMode = android.graphics.BlendMode.CLEAR
+                        blendMode = BlendMode.CLEAR
                         isAntiAlias = true
                     }
                     canvas.nativeCanvas.drawPoint(size.width / 2, size.height / 2, paint)

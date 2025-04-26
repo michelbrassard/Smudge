@@ -25,7 +25,10 @@ import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
 import edu.rit.mb6149.smudge.model.Tool
 import edu.rit.mb6149.smudge.toolbars.BrushToolbar
+import edu.rit.mb6149.smudge.toolbars.ColorPicker
+import edu.rit.mb6149.smudge.toolbars.DownloadOptions
 import edu.rit.mb6149.smudge.toolbars.EraserToolbar
+import edu.rit.mb6149.smudge.toolbars.Layers
 import edu.rit.mb6149.smudge.toolbars.PaintRollerToolbar
 import edu.rit.mb6149.smudge.ui.theme.SmudgeTheme
 

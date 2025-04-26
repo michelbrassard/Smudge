@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.toolbars
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import edu.rit.mb6149.smudge.Thumbnail
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.Layer
 import org.burnoutcrew.reorderable.ReorderableItem
@@ -59,12 +60,12 @@ fun Layers(
         customHeight = 500.dp
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxSize()
         ) {
             LazyColumn(
                 state = state.listState,
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .reorderable(state)
                     .detectReorderAfterLongPress(state)
                     .padding(8.dp)
@@ -78,10 +79,10 @@ fun Layers(
                             if (isDragging) 16.dp else 0.dp, label = ""
                         )
                         Column(
-                            modifier = Modifier
+                            modifier = Modifier.Companion
                                 .fillMaxWidth()
                                 .shadow(elevation)
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
                                 .background(
                                     if (index == updatedLayerPosition)
                                         MaterialTheme.colorScheme.secondaryContainer
@@ -90,13 +91,13 @@ fun Layers(
                                 )
                         ) {
                             Row(
-                                modifier = Modifier
+                                modifier = Modifier.Companion
                                     .clickable {
                                         updateLayerPosition(index)
                                     }
                                     .fillMaxWidth()
                                     .padding(8.dp),
-                                verticalAlignment = Alignment.CenterVertically,
+                                verticalAlignment = Alignment.Companion.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Thumbnail(item)
@@ -113,8 +114,7 @@ fun Layers(
                                         if (updatedLayerPosition > index) {
                                             updateLayerPosition(index)
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         item.drawPaths.clear()
                                     }
                                 }) {
@@ -129,7 +129,7 @@ fun Layers(
                 }
             }
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.Companion.padding(16.dp)
             ) {
                 Button(onClick = {
                     layers.add(Layer("Layer " + layers.size))
@@ -141,5 +141,3 @@ fun Layers(
         }
     }
 }
-
-
