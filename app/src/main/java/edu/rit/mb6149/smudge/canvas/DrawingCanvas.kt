@@ -99,9 +99,8 @@ fun DrawingCanvas(
         Canvas(modifier = Modifier.Companion.fillMaxSize()) {
             val bounds = RectF(0f, 0f, size.width, size.height)
             drawIntoCanvas { canvas ->
-                val layerId =
-                    canvas.nativeCanvas.saveLayer(bounds, null) //temporary canvas for blending
                 updatedArtwork.layers.forEach { layer ->
+                    val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
                     layer.drawPaths.forEach { drawPath ->
                         val paint = Paint().apply {
                             color = drawPath.color
@@ -115,8 +114,8 @@ fun DrawingCanvas(
                         }
                         canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
                     }
+                    canvas.nativeCanvas.restoreToCount(layerId)
                 }
-                canvas.nativeCanvas.restoreToCount(layerId)
             }
         }
     }
