@@ -15,8 +15,10 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
 import edu.rit.mb6149.smudge.model.Tool
@@ -24,12 +26,16 @@ import edu.rit.mb6149.smudge.toolbars.BrushToolbar
 import edu.rit.mb6149.smudge.toolbars.ColorPicker
 import edu.rit.mb6149.smudge.toolbars.DownloadOptions
 import edu.rit.mb6149.smudge.toolbars.EraserToolbar
-import edu.rit.mb6149.smudge.toolbars.Layers
+import edu.rit.mb6149.smudge.toolbars.layers.Layers
 import edu.rit.mb6149.smudge.toolbars.PaintRollerToolbar
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun CanvasPage() {
+fun CanvasPage(
+    navController: NavHostController,
+    currentArtwork: Artwork
+) {
+    val artwork by rememberUpdatedState(currentArtwork)
     var selectedTool by remember { mutableStateOf(Tool.BRUSH) }
 
     var isColorsOpen by remember { mutableStateOf(false) }
@@ -37,7 +43,6 @@ fun CanvasPage() {
     var isDownloadOpen by remember { mutableStateOf(false) }
     var isToolbarOpen by remember { mutableStateOf(false) }
 
-    var artwork by remember { mutableStateOf(Artwork("Test")) }
     var currentLayerPosition by remember { mutableIntStateOf(0) }
 
     var color by remember { mutableIntStateOf(Color.BLACK) }
@@ -57,7 +62,8 @@ fun CanvasPage() {
                 },
                 isDownloadOpen = { updateIsDownloadOpen ->
                     isDownloadOpen = updateIsDownloadOpen
-                }
+                },
+                navController
             )
         },
         bottomBar = {

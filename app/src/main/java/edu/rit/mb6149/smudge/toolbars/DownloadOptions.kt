@@ -14,7 +14,7 @@ fun DownloadOptions(
         customHeight = 200.dp
     ) {
         Column {
-            Text("Layers...")
+            Text("Download...")
         }
     }
 }

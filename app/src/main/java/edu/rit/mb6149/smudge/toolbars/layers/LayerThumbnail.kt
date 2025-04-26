@@ -1,5 +1,7 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.toolbars.layers
 
+import android.graphics.Paint
+import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -17,31 +19,31 @@ import androidx.compose.ui.unit.dp
 import edu.rit.mb6149.smudge.model.Layer
 
 @Composable
-fun Thumbnail(layer: Layer) {
-
-    Canvas(modifier = Modifier
-        .size(80.dp)
-        .clip(RoundedCornerShape(4.dp))
-        .background(Color.White)
+fun LayerThumbnail(layer: Layer) {
+    Canvas(
+        modifier = Modifier.Companion
+            .size(80.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(Color.Companion.White)
     ) {
         val rectContainingAllPaths = layer.drawPaths
             .map { it.path.getBounds() }
-            .fold(Rect.Zero) { current, rect -> current.combine(rect) }
+            .fold(Rect.Companion.Zero) { current, rect -> current.combine(rect) }
 
         val scaleX = (size.width) / rectContainingAllPaths.width
         val scaleY = (size.height) / rectContainingAllPaths.height
         val scale = minOf(scaleX, scaleY)
 
         //certain elements disappear because they become too small to show on the canvas
-        withTransform ({
+        withTransform({
             translate(-rectContainingAllPaths.width / 2 * scale)
             scale(scale, scale)
         }) {
-            val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
+            val bounds = RectF(0f, 0f, size.width, size.height)
             drawIntoCanvas { canvas ->
                 val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
                 layer.drawPaths.forEach { drawPath ->
-                    val paint = android.graphics.Paint().apply {
+                    val paint = Paint().apply {
                         color = drawPath.color
                         strokeWidth = drawPath.strokeWidth
                         style = drawPath.style
@@ -58,8 +60,8 @@ fun Thumbnail(layer: Layer) {
 }
 
 fun Rect.combine(otherRect: Rect): Rect {
-    if (this == Rect.Zero) return otherRect
-    if (otherRect == Rect.Zero) return this
+    if (this == Rect.Companion.Zero) return otherRect
+    if (otherRect == Rect.Companion.Zero) return this
 
 
     //get the furthest left point

@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.toolbars.layers
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -28,9 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import edu.rit.mb6149.smudge.Thumbnail
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.Layer
+import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -100,7 +100,7 @@ fun Layers(
                                 verticalAlignment = Alignment.Companion.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Thumbnail(item)
+                                LayerThumbnail(item)
                                 Text(item.name)
                                 IconButton(onClick = {
                                     if (layers.size > 1) {

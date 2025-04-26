@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.compose)
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
     implementation("com.github.skydoves:colorpicker-compose:1.1.2")
     implementation(libs.androidx.core.ktx)
