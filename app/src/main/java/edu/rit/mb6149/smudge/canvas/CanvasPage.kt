@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,15 +20,15 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import edu.rit.mb6149.smudge.Storage
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
-import edu.rit.mb6149.smudge.model.Tool
-import edu.rit.mb6149.smudge.toolbars.BrushToolbar
-import edu.rit.mb6149.smudge.toolbars.ColorPicker
-import edu.rit.mb6149.smudge.toolbars.DownloadOptions
-import edu.rit.mb6149.smudge.toolbars.EraserToolbar
-import edu.rit.mb6149.smudge.toolbars.layers.Layers
-import edu.rit.mb6149.smudge.toolbars.PaintRollerToolbar
+import edu.rit.mb6149.smudge.canvas.toolbars.BrushToolbar
+import edu.rit.mb6149.smudge.canvas.toolbars.ColorPicker
+import edu.rit.mb6149.smudge.canvas.toolbars.DownloadOptions
+import edu.rit.mb6149.smudge.canvas.toolbars.EraserToolbar
+import edu.rit.mb6149.smudge.canvas.toolbars.layers.Layers
+import edu.rit.mb6149.smudge.canvas.toolbars.PaintRollerToolbar
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -94,6 +95,11 @@ fun CanvasPage(
                 currentLayerPosition,
                 blendMode
             )
+        }
+        DisposableEffect(Unit) {
+            onDispose {
+                Storage.save(artwork)
+            }
         }
     }
 

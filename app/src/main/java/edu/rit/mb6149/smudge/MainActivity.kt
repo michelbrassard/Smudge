@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,10 @@ class MainActivity : ComponentActivity() {
 fun Navigation(navController: NavHostController) {
     var currentArtwork: Artwork? by remember { mutableStateOf<Artwork?>(null) }
     val artworks: SnapshotStateList<Artwork> = remember { mutableStateListOf() }
+
+    LaunchedEffect(Unit) {
+        Storage.load(artworks) // This should return a list of Artwork
+    }
 
     NavHost(navController, startDestination = "gallery") {
         composable("gallery") {

@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import edu.rit.mb6149.smudge.Storage
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.canvas.toolbars.MinimalDialog
 
@@ -74,6 +75,7 @@ fun DeleteArtworkConfirmationAlert(
                         contentColor = Color.White),
                     onClick = {
                         artworks.remove(artwork)
+                        Storage.remove(artwork)
                         updateIsDeleteDialogOpen(false)
                     },
 
