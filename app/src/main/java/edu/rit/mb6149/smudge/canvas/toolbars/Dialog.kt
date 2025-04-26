@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

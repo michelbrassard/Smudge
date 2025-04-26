@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

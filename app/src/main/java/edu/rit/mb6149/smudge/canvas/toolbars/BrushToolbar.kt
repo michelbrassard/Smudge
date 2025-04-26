@@ -1,9 +1,7 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.canvas.toolbars
 
-import android.graphics.BlendMode
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.RectF
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -33,9 +31,9 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import edu.rit.mb6149.smudge.model.BrushType
 
-@RequiresApi(Build.VERSION_CODES.Q)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun EraserToolbar(
+fun BrushToolbar(
     updateIsToolbarOpen: (Boolean) -> Unit,
     updateStrokeWidth: (Float) -> Unit,
     updateBrushType: (BrushType) -> Unit,
@@ -62,28 +60,16 @@ fun EraserToolbar(
                     .fillMaxWidth()
                     .height(300.dp)
             ) {
-                val bounds = RectF(0f, 0f, size.width, size.height)
                 drawIntoCanvas { canvas ->
-                    val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
-                    val rectangleBackground = Paint().apply {
-                        color = Color.BLACK
-                        style = Paint.Style.FILL
-                        blendMode = BlendMode.SRC_OVER
-                    }
-                    val referenceRectangle = RectF(0f, 0f, size.width, size.height)
-                    canvas.nativeCanvas.drawRect(referenceRectangle, rectangleBackground)
-
                     val paint = Paint().apply {
                         color = Color.BLACK
                         strokeWidth = updatedStrokeWidth
                         style = Paint.Style.STROKE
                         strokeCap = updatedBrushType.strokeCap
                         maskFilter = updatedBrushType.maskFilter
-                        blendMode = BlendMode.CLEAR
                         isAntiAlias = true
                     }
                     canvas.nativeCanvas.drawPoint(size.width / 2, size.height / 2, paint)
-                    canvas.nativeCanvas.restoreToCount(layerId)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))

@@ -1,9 +1,9 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.graphics.Path
+import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,11 +30,9 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import edu.rit.mb6149.smudge.model.BrushType
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun BrushToolbar(
+fun PaintRollerToolbar(
     updateIsToolbarOpen: (Boolean) -> Unit,
-    updateStrokeWidth: (Float) -> Unit,
     updateBrushType: (BrushType) -> Unit,
     currentStrokeWidth: Float,
     currentBrush: BrushType
@@ -64,23 +61,21 @@ fun BrushToolbar(
                     val paint = Paint().apply {
                         color = Color.BLACK
                         strokeWidth = updatedStrokeWidth
-                        style = Paint.Style.STROKE
+                        style = Paint.Style.FILL
                         strokeCap = updatedBrushType.strokeCap
                         maskFilter = updatedBrushType.maskFilter
                         isAntiAlias = true
                     }
-                    canvas.nativeCanvas.drawPoint(size.width / 2, size.height / 2, paint)
+                    val centerX = size.width / 2
+                    val centerY = size.height / 2
+                    val arcPath = Path().apply {
+                        addArc(RectF(centerX - 250f, 450f, centerX + 250f, centerY + 400f), 0f, -180f)
+                    }
+                    canvas.nativeCanvas.drawPath(arcPath, paint)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Slider(
-                updatedStrokeWidth,
-                onValueChange = {
-                        newValue -> updateStrokeWidth(newValue)
-                },
-                valueRange = 1f..500f
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+
             Box(
                 modifier = Modifier
                     .padding(16.dp)

@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge.toolbars.layers
+package edu.rit.mb6149.smudge.canvas.toolbars.layers
 
 import android.graphics.Paint
 import android.graphics.RectF
