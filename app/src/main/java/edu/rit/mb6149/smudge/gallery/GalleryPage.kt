@@ -63,7 +63,7 @@ fun GalleryPage(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Gallery")
+                    Text("Smudge")
                 }
             )
         },
