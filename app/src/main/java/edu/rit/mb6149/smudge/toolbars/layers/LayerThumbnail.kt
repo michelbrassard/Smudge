@@ -21,14 +21,14 @@ import edu.rit.mb6149.smudge.model.Layer
 @Composable
 fun LayerThumbnail(layer: Layer) {
     Canvas(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .size(80.dp)
             .clip(RoundedCornerShape(4.dp))
-            .background(Color.Companion.White)
+            .background(Color.White)
     ) {
         val rectContainingAllPaths = layer.drawPaths
             .map { it.path.getBounds() }
-            .fold(Rect.Companion.Zero) { current, rect -> current.combine(rect) }
+            .fold(Rect.Zero) { current, rect -> current.combine(rect) }
 
         val scaleX = (size.width) / rectContainingAllPaths.width
         val scaleY = (size.height) / rectContainingAllPaths.height
@@ -60,8 +60,8 @@ fun LayerThumbnail(layer: Layer) {
 }
 
 fun Rect.combine(otherRect: Rect): Rect {
-    if (this == Rect.Companion.Zero) return otherRect
-    if (otherRect == Rect.Companion.Zero) return this
+    if (this == Rect.Zero) return otherRect
+    if (otherRect == Rect.Zero) return this
 
 
     //get the furthest left point
