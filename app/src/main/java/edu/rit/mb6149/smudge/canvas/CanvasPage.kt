@@ -81,7 +81,8 @@ fun CanvasPage(
                 selectedTool = selectedTool,
                 updateBlendMode = { updateBlendMode ->
                     blendMode = updateBlendMode
-                }
+                },
+                currentLayer = artwork.layers[currentLayerPosition]
             )
         },
     ) { innerPadding ->

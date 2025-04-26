@@ -65,6 +65,7 @@ fun DrawingCanvas(
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
+                        updatedArtwork.layers[updatedLayerPosition].reset()
                         currentDrawPath = DrawPath(
                             Path().apply { moveTo(offset.x, offset.y) },
                             updatedColor,

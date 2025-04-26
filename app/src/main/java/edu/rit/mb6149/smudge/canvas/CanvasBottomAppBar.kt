@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
 import edu.rit.mb6149.smudge.R
+import edu.rit.mb6149.smudge.model.Layer
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
@@ -22,18 +23,31 @@ fun CanvasBottomAppBar(
     updateBrushStyle: (Paint.Style) -> Unit,
     updateBlendMode: (BlendMode) -> Unit,
     updateSelectedTool: (Tool) -> Unit,
-    selectedTool: Tool
+    selectedTool: Tool,
+    currentLayer: Layer
 ) {
     val updatedSelectedTool by rememberUpdatedState(selectedTool)
+    val layer by rememberUpdatedState(currentLayer)
+
     BottomAppBar(
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(
+                onClick = {
+                    layer.undo()
+                },
+                enabled = layer.canPerformUndo()
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.undo_2),
                     contentDescription = "Undo"
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(
+                onClick = {
+                    layer.redo()
+                },
+                enabled = layer.canPerformRedo()
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.redo_2),
                     contentDescription = "Redo"
