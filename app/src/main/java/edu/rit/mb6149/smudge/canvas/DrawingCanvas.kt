@@ -100,6 +100,7 @@ fun DrawingCanvas(
             val bounds = RectF(0f, 0f, size.width, size.height)
             drawIntoCanvas { canvas ->
                 updatedArtwork.layers.forEach { layer ->
+                    //an empty layer has to be created so that transparency can be properly loaded
                     val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
                     layer.drawPaths.forEach { drawPath ->
                         val paint = Paint().apply {
