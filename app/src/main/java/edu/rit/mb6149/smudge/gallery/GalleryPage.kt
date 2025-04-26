@@ -1,6 +1,8 @@
 package edu.rit.mb6149.smudge.gallery
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +23,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.rit.mb6149.smudge.model.Artwork
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -40,6 +47,8 @@ fun GalleryPage(
     currentArtworks: SnapshotStateList<Artwork>
 ) {
     val artworks by rememberUpdatedState(currentArtworks)
+    var isDeleteArtworkDialogOpen by remember { mutableStateOf(false) }
+    var currentIndexForDeletion by remember { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = Modifier.Companion
@@ -82,7 +91,18 @@ fun GalleryPage(
                     modifier = Modifier.Companion.padding(16.dp)
                 ) {
                     items(artworks.size) { index ->
-                        GalleryItem(navController, artworks[index], updateCurrentArtwork)
+                        GalleryItem(
+                            navController,
+                            artworks[index],
+                            index,
+                            updateCurrentArtwork,
+                            showDeleteDialog = { updateDeleteDialogState ->
+                                isDeleteArtworkDialogOpen = updateDeleteDialogState
+                            },
+                            updateDeleteIndex = { updatedIndex ->
+                                currentIndexForDeletion = updatedIndex
+                            }
+                        )
                     }
                 }
             }
@@ -100,6 +120,17 @@ fun GalleryPage(
                     )
                 }
             }
+        }
+    }
+    when {
+        isDeleteArtworkDialogOpen && artworks.isNotEmpty() -> {
+            DeleteArtworkConfirmationAlert(
+                updateIsDeleteDialogOpen = { updateDeleteDialogState ->
+                    isDeleteArtworkDialogOpen = updateDeleteDialogState
+                },
+                currentArtworks = artworks,
+                currentArtwork = artworks[currentIndexForDeletion],
+            )
         }
     }
 }
