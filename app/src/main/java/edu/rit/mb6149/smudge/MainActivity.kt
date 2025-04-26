@@ -21,6 +21,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import edu.rit.mb6149.smudge.canvas.CanvasBottomAppBar
+import edu.rit.mb6149.smudge.canvas.CanvasTopAppBar
+import edu.rit.mb6149.smudge.canvas.DrawingCanvas
 import edu.rit.mb6149.smudge.model.Artwork
 import edu.rit.mb6149.smudge.model.BrushType
 import edu.rit.mb6149.smudge.model.Tool
@@ -57,32 +60,36 @@ class MainActivity : ComponentActivity() {
                 var blendMode by remember { mutableStateOf(BlendMode.SRC_OVER) }
 
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                        topBar = { TopAppBar(
-                            isColorsOpen = { updateIsColorsOpen ->
-                                isColorsOpen = updateIsColorsOpen
-                            },
-                            isLayersOpen = { updateIsLayersOpen ->
-                                isLayersOpen = updateIsLayersOpen
-                            },
-                            isDownloadOpen = { updateIsDownloadOpen ->
-                                isDownloadOpen = updateIsDownloadOpen
-                            }
-                        ) },
-                        bottomBar = { BottomAppBar(
-                            isToolbarOpen = { updateIsSizeOpen ->
-                                isToolbarOpen = updateIsSizeOpen
-                            },
-                            updateBrushStyle = { updateBrushStyle ->
-                                style = updateBrushStyle
-                            },
-                            updateSelectedTool = { updateSelectedTool ->
-                                selectedTool = updateSelectedTool
-                            },
-                            selectedTool = selectedTool,
-                            updateBlendMode = { updateBlendMode ->
-                                blendMode = updateBlendMode
-                            }
-                        ) },
+                        topBar = {
+                            CanvasTopAppBar(
+                                isColorsOpen = { updateIsColorsOpen ->
+                                    isColorsOpen = updateIsColorsOpen
+                                },
+                                isLayersOpen = { updateIsLayersOpen ->
+                                    isLayersOpen = updateIsLayersOpen
+                                },
+                                isDownloadOpen = { updateIsDownloadOpen ->
+                                    isDownloadOpen = updateIsDownloadOpen
+                                }
+                            )
+                        },
+                        bottomBar = {
+                            CanvasBottomAppBar(
+                                isToolbarOpen = { updateIsSizeOpen ->
+                                    isToolbarOpen = updateIsSizeOpen
+                                },
+                                updateBrushStyle = { updateBrushStyle ->
+                                    style = updateBrushStyle
+                                },
+                                updateSelectedTool = { updateSelectedTool ->
+                                    selectedTool = updateSelectedTool
+                                },
+                                selectedTool = selectedTool,
+                                updateBlendMode = { updateBlendMode ->
+                                    blendMode = updateBlendMode
+                                }
+                            )
+                        },
                     ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         DrawingCanvas(

@@ -1,6 +1,7 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.canvas
 
 import android.graphics.BlendMode
+import android.graphics.Paint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.BottomAppBar
@@ -12,13 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
+import edu.rit.mb6149.smudge.R
 import edu.rit.mb6149.smudge.model.Tool
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun BottomAppBar(
+fun CanvasBottomAppBar(
     isToolbarOpen: (Boolean) -> Unit,
-    updateBrushStyle: (android.graphics.Paint.Style) -> Unit,
+    updateBrushStyle: (Paint.Style) -> Unit,
     updateBlendMode: (BlendMode) -> Unit,
     updateSelectedTool: (Tool) -> Unit,
     selectedTool: Tool
@@ -41,7 +43,7 @@ fun BottomAppBar(
             IconButton(onClick = {
                 updateSelectedTool(Tool.ERASER)
                 updateBlendMode(BlendMode.CLEAR)
-                updateBrushStyle(android.graphics.Paint.Style.STROKE)
+                updateBrushStyle(Paint.Style.STROKE)
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.eraser),
@@ -51,7 +53,7 @@ fun BottomAppBar(
             IconButton(onClick = {
                 updateSelectedTool(Tool.BRUSH)
                 updateBlendMode(BlendMode.SRC_OVER)
-                updateBrushStyle(android.graphics.Paint.Style.STROKE)
+                updateBrushStyle(Paint.Style.STROKE)
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.brush),
@@ -61,7 +63,7 @@ fun BottomAppBar(
             IconButton(
                 onClick = {
                     updateSelectedTool(Tool.PAINT_ROLLER)
-                    updateBrushStyle(android.graphics.Paint.Style.FILL)
+                    updateBrushStyle(Paint.Style.FILL)
                     updateBlendMode(BlendMode.SRC_OVER)
                 }
             ) {
@@ -85,12 +87,14 @@ fun BottomAppBar(
                             contentDescription = "Brush"
                         )
                     }
+
                     Tool.ERASER -> {
                         Icon(
                             painter = painterResource(id = R.drawable.eraser),
                             contentDescription = "Eraser"
                         )
                     }
+
                     Tool.PAINT_ROLLER -> {
                         Icon(
                             painter = painterResource(id = R.drawable.paint_roller),
