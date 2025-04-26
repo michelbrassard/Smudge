@@ -21,7 +21,6 @@ import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
-import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 
 @Composable
 fun ColorPicker(

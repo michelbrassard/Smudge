@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
-import edu.rit.mb6149.smudge.toolbars.MinimalDialog
 import edu.rit.mb6149.smudge.model.BrushType
 
 @RequiresApi(Build.VERSION_CODES.Q)
