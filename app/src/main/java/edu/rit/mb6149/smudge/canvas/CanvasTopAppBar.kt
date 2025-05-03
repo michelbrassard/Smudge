@@ -16,7 +16,6 @@ import edu.rit.mb6149.smudge.R
 fun CanvasTopAppBar(
     isColorsOpen: (Boolean) -> Unit,
     isLayersOpen: (Boolean) -> Unit,
-    isDownloadOpen: (Boolean) -> Unit,
     navController: NavHostController
 ) {
     TopAppBar(
@@ -28,14 +27,6 @@ fun CanvasTopAppBar(
             }
         },
         actions = {
-            IconButton(onClick = {
-                isDownloadOpen(true)
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.download),
-                    contentDescription = "Download"
-                )
-            }
             IconButton(onClick = {
                 isLayersOpen(true)
             }) {
