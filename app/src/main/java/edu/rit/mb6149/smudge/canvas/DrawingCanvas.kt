@@ -55,9 +55,6 @@ fun DrawingCanvas(
         mutableStateOf<Offset?>(null)
     }
 
-    //val bitmap by remember { mutableStateOf(createBitmap(100, 100)) }
-    //val customCanvas by remember { mutableStateOf(Canvas(bitmap)) }
-
     Box(
         modifier = Modifier.Companion
             .fillMaxSize()
