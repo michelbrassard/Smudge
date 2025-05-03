@@ -2,7 +2,6 @@ package edu.rit.mb6149.smudge
 
 import android.content.Context
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.platform.LocalContext
 import edu.rit.mb6149.smudge.dto.ArtworkDTO
 import edu.rit.mb6149.smudge.model.Artwork
 import kotlinx.serialization.json.Json
