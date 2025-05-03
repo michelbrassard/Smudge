@@ -63,7 +63,6 @@ fun Rect.combine(otherRect: Rect): Rect {
     if (this == Rect.Zero) return otherRect
     if (otherRect == Rect.Zero) return this
 
-
     //get the furthest left point
     //left goes "more" left, top "more" to top ...
     val left = minOf(this.left, otherRect.left)
