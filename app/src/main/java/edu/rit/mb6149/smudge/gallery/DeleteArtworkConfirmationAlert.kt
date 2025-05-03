@@ -24,6 +24,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import edu.rit.mb6149.smudge.Storage
 import edu.rit.mb6149.smudge.model.Artwork
@@ -37,6 +38,7 @@ fun DeleteArtworkConfirmationAlert(
 ) {
     val artworks by rememberUpdatedState(currentArtworks)
     val artwork by rememberUpdatedState(currentArtwork)
+    val context = LocalContext.current
     MinimalDialog(
         onDismissRequest = { updateIsDeleteDialogOpen(false) },
         customHeight = 200.dp,
@@ -75,7 +77,7 @@ fun DeleteArtworkConfirmationAlert(
                         contentColor = Color.White),
                     onClick = {
                         artworks.remove(artwork)
-                        Storage.remove(artwork)
+                        Storage.remove(context, artwork)
                         updateIsDeleteDialogOpen(false)
                     },
 

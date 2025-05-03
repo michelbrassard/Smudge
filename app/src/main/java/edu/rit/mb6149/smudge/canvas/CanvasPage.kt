@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import edu.rit.mb6149.smudge.Storage
 import edu.rit.mb6149.smudge.model.Artwork
@@ -52,6 +53,8 @@ fun CanvasPage(
     var brushType by remember { mutableStateOf(BrushType.PEN) }
     var blendMode by remember { mutableStateOf(BlendMode.SRC_OVER) }
 
+    val context = LocalContext.current
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             CanvasTopAppBar(
@@ -60,9 +63,6 @@ fun CanvasPage(
                 },
                 isLayersOpen = { updateIsLayersOpen ->
                     isLayersOpen = updateIsLayersOpen
-                },
-                isDownloadOpen = { updateIsDownloadOpen ->
-                    isDownloadOpen = updateIsDownloadOpen
                 },
                 navController
             )
@@ -99,7 +99,7 @@ fun CanvasPage(
         }
         DisposableEffect(Unit) {
             onDispose {
-                Storage.save(artwork)
+                Storage.save(context, artwork)
             }
         }
     }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.platform.LocalContext
 import edu.rit.mb6149.smudge.canvas.CanvasPage
 import edu.rit.mb6149.smudge.ui.theme.SmudgeTheme
 import androidx.navigation.NavHostController
@@ -44,9 +45,9 @@ class MainActivity : ComponentActivity() {
 fun Navigation(navController: NavHostController) {
     var currentArtwork: Artwork? by remember { mutableStateOf<Artwork?>(null) }
     val artworks: SnapshotStateList<Artwork> = remember { mutableStateListOf() }
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
-        Storage.load(artworks) // This should return a list of Artwork
+        Storage.load(context, artworks) // This should return a list of Artwork
     }
 
     NavHost(navController, startDestination = "gallery") {
