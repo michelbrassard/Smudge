@@ -1,7 +1,10 @@
 package edu.rit.mb6149.smudge.canvas.toolbars.layers
 
+import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.RectF
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -13,11 +16,12 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import edu.rit.mb6149.smudge.model.Layer
+import androidx.core.graphics.createBitmap
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun LayerThumbnail(layer: Layer) {
     Canvas(
@@ -26,35 +30,18 @@ fun LayerThumbnail(layer: Layer) {
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White)
     ) {
-        val rectContainingAllPaths = layer.drawPaths
-            .map { it.path.getBounds() }
-            .fold(Rect.Zero) { current, rect -> current.combine(rect) }
+        if (layer.drawPaths.isEmpty()) {
+            return@Canvas
+        }
+        val bitmap = drawLayerToBitmap(layer)
 
-        val scaleX = (size.width) / rectContainingAllPaths.width
-        val scaleY = (size.height) / rectContainingAllPaths.height
+        val scaleX = size.width / bitmap.width
+        val scaleY = size.height / bitmap.height
         val scale = minOf(scaleX, scaleY)
 
-        //certain elements disappear because they become too small to show on the canvas
-        withTransform({
-            translate(-rectContainingAllPaths.width / 2 * scale)
-            scale(scale, scale)
-        }) {
-            val bounds = RectF(0f, 0f, size.width, size.height)
-            drawIntoCanvas { canvas ->
-                val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
-                layer.drawPaths.forEach { drawPath ->
-                    val paint = Paint().apply {
-                        color = drawPath.color
-                        strokeWidth = drawPath.strokeWidth
-                        style = drawPath.style
-                        strokeCap = drawPath.brushType.strokeCap
-                        maskFilter = drawPath.brushType.maskFilter
-                        isAntiAlias = true
-                    }
-                    canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
-                }
-                canvas.nativeCanvas.restoreToCount(layerId)
-            }
+        drawIntoCanvas { canvas ->
+            val destRect = RectF(0f, 0f, bitmap.width * scale, bitmap.height * scale)
+            canvas.nativeCanvas.drawBitmap(bitmap, null, destRect, null)
         }
     }
 }
@@ -62,7 +49,6 @@ fun LayerThumbnail(layer: Layer) {
 fun Rect.combine(otherRect: Rect): Rect {
     if (this == Rect.Zero) return otherRect
     if (otherRect == Rect.Zero) return this
-
 
     //get the furthest left point
     //left goes "more" left, top "more" to top ...
@@ -72,4 +58,35 @@ fun Rect.combine(otherRect: Rect): Rect {
     val bottom = maxOf(this.bottom, otherRect.bottom)
 
     return Rect(left, top, right, bottom)
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+fun drawLayerToBitmap(
+    layer: Layer,
+): Bitmap {
+    val rectContainingAllPaths = layer.drawPaths
+        .map { it.path.getBounds() }
+        .fold(Rect.Zero) { current, rect -> current.combine(rect) }
+
+    val bitmap = createBitmap(rectContainingAllPaths.width.toInt(), rectContainingAllPaths.height.toInt())
+    val canvas = android.graphics.Canvas(bitmap)
+
+    val bounds = RectF(0f, 0f, rectContainingAllPaths.width, rectContainingAllPaths.height)
+    val layerId = canvas.saveLayer(bounds, null)
+    layer.drawPaths.forEach { drawPath ->
+        val paint = Paint().apply {
+            color = drawPath.color
+            strokeWidth = drawPath.strokeWidth
+            style = drawPath.style
+            strokeCap = drawPath.brushType.strokeCap
+            maskFilter = drawPath.brushType.maskFilter
+            isAntiAlias = true
+            blendMode = drawPath.blendMode
+            strokeJoin = Paint.Join.ROUND
+        }
+        canvas.drawPath(drawPath.path.asAndroidPath(), paint)
+    }
+    canvas.restoreToCount(layerId)
+
+    return bitmap
 }

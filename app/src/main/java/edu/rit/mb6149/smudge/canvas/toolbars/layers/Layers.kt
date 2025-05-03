@@ -103,15 +103,17 @@ fun Layers(
                                 Text(item.name)
                                 IconButton(onClick = {
                                     if (layers.size > 1) {
-                                        layers = layers.apply {
-                                            removeAt(index)
-                                        }
-                                        //todo fix this
-                                        if (updatedLayerPosition > 0 && updatedLayerPosition > index) {
-                                            updateLayerPosition(index - 1)
-                                        }
-                                        if (updatedLayerPosition > index) {
-                                            updateLayerPosition(index)
+                                        try {
+                                            if (updatedLayerPosition > 0) {
+                                                updateLayerPosition(updatedLayerPosition - 1)
+                                            }
+
+                                            layers = layers.apply {
+                                                removeAt(index)
+                                            }
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                            updateLayerPosition(0)
                                         }
                                     } else {
                                         item.drawPaths.clear()
