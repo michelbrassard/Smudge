@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -30,10 +29,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import androidx.navigation.NavHostController
-import edu.rit.mb6149.smudge.canvas.toolbars.layers.combine
-import edu.rit.mb6149.smudge.canvas.toolbars.layers.drawLayerToBitmap
 import edu.rit.mb6149.smudge.model.Artwork
-import edu.rit.mb6149.smudge.model.Layer
 
 @OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -62,7 +58,6 @@ fun GalleryItem(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //todo
         Canvas(
             modifier = Modifier
                 .size(170.dp)
