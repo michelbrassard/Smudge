@@ -12,7 +12,6 @@ class Storage {
          * Load artworks stored on the device
          */
         fun load(context: Context, artworks: SnapshotStateList<Artwork>) {
-            println("Loaded: $artworks")
             artworks.clear()
             context.fileList()
                 .filter { it != "profileInstalled" }
@@ -44,9 +43,7 @@ class Storage {
          */
         fun remove(context: Context, artwork: Artwork) {
             val success = context.deleteFile(artwork.fileName)
-            if (success) {
-                println("Deleted successfully")
-            } else {
+            if (!success) {
                 println("File not found")
             }
         }
