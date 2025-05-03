@@ -2,13 +2,27 @@ package edu.rit.mb6149.smudge.model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import edu.rit.mb6149.smudge.dto.ArtworkDTO
+import java.util.UUID
 
-class Artwork(
+data class Artwork(
+    val fileName: String,
     var name: String,
     val layers: SnapshotStateList<Layer> = mutableStateListOf(Layer("Base Layer"))
-)
+) {
+    constructor(dto: ArtworkDTO) : this(
+        fileName = dto.fileName,
+        name = dto.name,
+        layers = mutableStateListOf<Layer>().apply {
+            dto.layers.forEach { add(Layer(it)) }
+        }
+    )
 
-class Layer(
-    var name: String,
-    val drawPaths: SnapshotStateList<DrawPath> = mutableStateListOf()
-)
+    constructor(name: String) : this(
+        fileName = "${UUID.randomUUID()}.json",
+        name = name,
+        layers = mutableStateListOf(Layer("Base Layer"))
+    )
+
+    fun toDTO() = ArtworkDTO(this)
+}

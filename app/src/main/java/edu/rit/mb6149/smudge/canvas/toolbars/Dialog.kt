@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,15 +21,15 @@ fun MinimalDialog(
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxWidth()
                 .height(customHeight),
             shape = RoundedCornerShape(16.dp),
         ) {
             Box(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Companion.Center
             ) {
                 content()
             }

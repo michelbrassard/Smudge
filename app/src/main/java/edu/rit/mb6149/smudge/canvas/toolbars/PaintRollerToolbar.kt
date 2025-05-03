@@ -1,9 +1,9 @@
-package edu.rit.mb6149.smudge.toolbars
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.graphics.Path
+import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,14 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
-import edu.rit.mb6149.smudge.MinimalDialog
 import edu.rit.mb6149.smudge.model.BrushType
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun EraserToolbar(
+fun PaintRollerToolbar(
     updateIsToolbarOpen: (Boolean) -> Unit,
-    updateStrokeWidth: (Float) -> Unit,
     updateBrushType: (BrushType) -> Unit,
     currentStrokeWidth: Float,
     currentBrush: BrushType
@@ -61,39 +57,25 @@ fun EraserToolbar(
                     .fillMaxWidth()
                     .height(300.dp)
             ) {
-                val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
                 drawIntoCanvas { canvas ->
-                    val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
-                    val rectangleBackground = Paint().apply {
-                        color = Color.BLACK
-                        style = Paint.Style.FILL
-                        blendMode = android.graphics.BlendMode.SRC_OVER
-                    }
-                    val referenceRectangle = android.graphics.RectF(0f, 0f, size.width, size.height)
-                    canvas.nativeCanvas.drawRect(referenceRectangle, rectangleBackground)
-
                     val paint = Paint().apply {
                         color = Color.BLACK
                         strokeWidth = updatedStrokeWidth
-                        style = Paint.Style.STROKE
+                        style = Paint.Style.FILL
                         strokeCap = updatedBrushType.strokeCap
                         maskFilter = updatedBrushType.maskFilter
-                        blendMode = android.graphics.BlendMode.CLEAR
                         isAntiAlias = true
                     }
-                    canvas.nativeCanvas.drawPoint(size.width / 2, size.height / 2, paint)
-                    canvas.nativeCanvas.restoreToCount(layerId)
+                    val centerX = size.width / 2
+                    val centerY = size.height / 2
+                    val arcPath = Path().apply {
+                        addArc(RectF(centerX - 250f, 450f, centerX + 250f, centerY + 400f), 0f, -180f)
+                    }
+                    canvas.nativeCanvas.drawPath(arcPath, paint)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Slider(
-                updatedStrokeWidth,
-                onValueChange = {
-                        newValue -> updateStrokeWidth(newValue)
-                },
-                valueRange = 1f..500f
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+
             Box(
                 modifier = Modifier
                     .padding(16.dp)

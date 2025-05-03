@@ -1,5 +1,8 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.canvas
 
+import android.graphics.BlendMode
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -30,11 +33,11 @@ import edu.rit.mb6149.smudge.model.DrawPath
 fun DrawingCanvas(
     currentColor: Int,
     currentStrokeWidth: Float,
-    currentStyle: android.graphics.Paint.Style,
+    currentStyle: Paint.Style,
     currentBrushType: BrushType,
     currentArtwork: Artwork,
     currentLayerPosition: Int,
-    currentBlendMode: android.graphics.BlendMode
+    currentBlendMode: BlendMode
 ) {
     val updatedColor by rememberUpdatedState(currentColor)
     val updatedStrokeWidth by rememberUpdatedState(currentStrokeWidth)
@@ -56,12 +59,13 @@ fun DrawingCanvas(
     //val customCanvas by remember { mutableStateOf(Canvas(bitmap)) }
 
     Box(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.Companion.White)
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
+                        updatedArtwork.layers[updatedLayerPosition].reset()
                         currentDrawPath = DrawPath(
                             Path().apply { moveTo(offset.x, offset.y) },
                             updatedColor,
@@ -93,13 +97,14 @@ fun DrawingCanvas(
                 )
             }
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val bounds = android.graphics.RectF(0f, 0f, size.width, size.height)
+        Canvas(modifier = Modifier.Companion.fillMaxSize()) {
+            val bounds = RectF(0f, 0f, size.width, size.height)
             drawIntoCanvas { canvas ->
-                val layerId = canvas.nativeCanvas.saveLayer(bounds, null) //temporary canvas for blending
                 updatedArtwork.layers.forEach { layer ->
+                    //an empty layer has to be created so that transparency can be properly loaded
+                    val layerId = canvas.nativeCanvas.saveLayer(bounds, null)
                     layer.drawPaths.forEach { drawPath ->
-                        val paint = android.graphics.Paint().apply {
+                        val paint = Paint().apply {
                             color = drawPath.color
                             strokeWidth = drawPath.strokeWidth
                             style = drawPath.style
@@ -107,12 +112,12 @@ fun DrawingCanvas(
                             maskFilter = drawPath.brushType.maskFilter
                             isAntiAlias = true
                             blendMode = drawPath.blendMode
-                            strokeJoin = android.graphics.Paint.Join.ROUND
+                            strokeJoin = Paint.Join.ROUND
                         }
                         canvas.nativeCanvas.drawPath(drawPath.path.asAndroidPath(), paint)
                     }
+                    canvas.nativeCanvas.restoreToCount(layerId)
                 }
-                canvas.nativeCanvas.restoreToCount(layerId)
             }
         }
     }

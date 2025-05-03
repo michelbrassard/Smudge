@@ -1,4 +1,4 @@
-package edu.rit.mb6149.smudge
+package edu.rit.mb6149.smudge.canvas.toolbars
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
@@ -14,7 +14,7 @@ fun DownloadOptions(
         customHeight = 200.dp
     ) {
         Column {
-            Text("Layers...")
+            Text("Download...")
         }
     }
 }
